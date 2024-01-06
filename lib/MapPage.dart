@@ -3,6 +3,8 @@ import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:guidini_app/WelcomePage.dart';
+import 'package:guidini_app/ChatPage.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -22,29 +24,32 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Map App')),
-      body: Column(
-        children: [
-          _searchBar(),
-          Expanded(
-            child: GoogleMap(
-              mapType: _currentMapType,
-              markers: _markers,
-              initialCameraPosition: _initialCameraPosition,
-              onMapCreated: (GoogleMapController controller) {
-                _controller.complete(controller);
-              },
-              myLocationEnabled: true,
-              myLocationButtonEnabled: true,
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: Text('Map App')),
+        body: Column(
+          children: [
+            _searchBar(),
+            Expanded(
+              child: GoogleMap(
+                mapType: _currentMapType,
+                markers: _markers,
+                initialCameraPosition: _initialCameraPosition,
+                onMapCreated: (GoogleMapController controller) {
+                  _controller.complete(controller);
+                },
+                myLocationEnabled: true,
+                myLocationButtonEnabled: true,
+              ),
             ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _toggleMapType,
-        tooltip: 'Toggle Map Type',
-        child: Icon(Icons.layers),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _toggleMapType,
+          tooltip: 'Toggle Map Type',
+          child: Icon(Icons.layers),
+        ),
+        bottomNavigationBar: _buildBottomAppBar(context),
       ),
     );
   }
@@ -93,7 +98,9 @@ class _MapPageState extends State<MapPage> {
           markerId: MarkerId(newLocation.toString()),
           position: newLocation,
           infoWindow: InfoWindow(
-              title: placeDetails['name'], snippet: placeDetails['formatted_address']),
+            title: placeDetails['name'],
+            snippet: placeDetails['formatted_address'],
+          ),
         ),
       );
 
@@ -110,6 +117,44 @@ class _MapPageState extends State<MapPage> {
       _currentMapType =
       _currentMapType == MapType.normal ? MapType.satellite : MapType.normal;
     });
+  }
+
+  Widget _buildBottomAppBar(BuildContext context) {
+    return BottomAppBar(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _buildBottomNavItem(Icons.home, () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => WelcomePage()),
+            );
+          }),
+          _buildBottomNavItem(Icons.map, () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MapPage()),
+            );
+          }),
+          _buildBottomNavItem(Icons.maps_ugc_outlined, () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ChatPage()),
+            );
+          }),
+          _buildBottomNavItem(Icons.accessibility, () {
+            // Add your functionality here
+          }),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBottomNavItem(IconData icon, VoidCallback onPressed) {
+    return IconButton(
+      icon: Icon(icon),
+      onPressed: onPressed,
+    );
   }
 }
 
