@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "610631272719",
+    "project_id": "guidini-407715",
+    "storage_bucket": "guidini-407715.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:610631272719:android:0e4f012daae7082b9c567a",
+        "android_client_info": {
+          "package_name": "com.example.guidini_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCd9AkKEtbRJKMjszVaTeuHx-ygQd6Mz6E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
