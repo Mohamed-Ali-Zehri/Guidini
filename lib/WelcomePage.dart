@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:guidini_app/MapPage.dart';
 import 'package:guidini_app/RestaurantPage.dart';
 import 'package:guidini_app/ChatPage.dart';
-
+import 'package:guidini_app/MonumentPage.dart';
 
 class WelcomePage extends StatefulWidget {
   @override
@@ -153,7 +153,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => WelcomePage()),
+                      MaterialPageRoute(builder: (context) => Monument()),
                     );
                   },
                   child: _buildCircularIcon(Icons.local_activity_outlined),
@@ -286,7 +286,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 },
               ),
               IconButton(
-                icon: Icon(Icons.chat),
+                icon: Icon(Icons.maps_ugc_outlined),
                 onPressed: () {
                   Navigator.push(
                       context,
@@ -294,7 +294,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 },
               ),
               IconButton(
-                icon: Icon(Icons.hail),
+                icon: Icon(Icons.accessibility),
                 onPressed: () {
 
                 },

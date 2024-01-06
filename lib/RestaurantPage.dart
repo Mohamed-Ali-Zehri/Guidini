@@ -64,6 +64,7 @@ class RestaurantPage extends StatelessWidget {
                             child: TextField(
                               textAlign: TextAlign.left,
                               decoration: InputDecoration(
+
                                 hintText: 'Search your destination here',
                                 hintStyle: TextStyle(
                                   color: Colors.white,
@@ -199,13 +200,13 @@ class RestaurantPage extends StatelessWidget {
                 },
               ),
               IconButton(
-                icon: Icon(Icons.chat),
+                icon: Icon(Icons.maps_ugc_outlined),
                 onPressed: () {
 
                 },
               ),
               IconButton(
-                icon: Icon(Icons.hail),
+                icon: Icon(Icons.accessibility),
                 onPressed: () {
 
                 },

@@ -85,7 +85,7 @@ class _MapSearchPageState extends State<MapPage> {
               },
             ),
             IconButton(
-              icon: Icon(Icons.chat),
+              icon: Icon(Icons.maps_ugc_outlined),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -94,7 +94,7 @@ class _MapSearchPageState extends State<MapPage> {
               },
             ),
             IconButton(
-              icon: Icon(Icons.hail),
+              icon: Icon(Icons.accessibility),
               onPressed: () {
 
               },
