@@ -65,7 +65,7 @@ class RestaurantPage extends StatelessWidget {
                               textAlign: TextAlign.left,
                               decoration: InputDecoration(
 
-                                hintText: 'Search your destination here',
+                                hintText: '      Search your destination here',
                                 hintStyle: TextStyle(
                                   color: Colors.white,
                                 ),

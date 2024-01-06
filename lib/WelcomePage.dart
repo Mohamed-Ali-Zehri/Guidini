@@ -3,6 +3,7 @@ import 'package:guidini_app/MapPage.dart';
 import 'package:guidini_app/RestaurantPage.dart';
 import 'package:guidini_app/ChatPage.dart';
 import 'package:guidini_app/MonumentPage.dart';
+import 'package:guidini_app/ActivityPage.dart';
 
 class WelcomePage extends StatefulWidget {
   @override
@@ -143,7 +144,10 @@ class _WelcomePageState extends State<WelcomePage> {
               children: [
                 GestureDetector(
                   onTap: () {
-
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ActivityPage()),
+                    );
                     // Handle onPressed for first icon (Icons.nature)
                     // Add your custom logic here
                   },
