@@ -190,13 +190,13 @@ class _MapPageState extends State<MapPage> {
               MaterialPageRoute(builder: (context) => MapPage()),
             );
           }),
-          _buildBottomNavItem(Icons.maps_ugc_outlined, () {
+          _buildBottomNavItem(Icons.chat, () {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => ChatPage()),
             );
           }),
-          _buildBottomNavItem(Icons.accessibility, () {
+          _buildBottomNavItem(Icons.person, () {
             // Add your functionality here
             Navigator.push(
               context,

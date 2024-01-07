@@ -169,7 +169,7 @@ class _WelcomePageState extends State<WelcomePage> {
                         // Handle onPressed for the first icon (Icons.nature)
                         // Add your custom logic here
                       },
-                      child: _buildCircularIcon(Icons.nature),
+                      child: _buildCircularIcon(Icons.sports_soccer),
                     ),
                     GestureDetector(
                       onTap: () {
@@ -178,7 +178,7 @@ class _WelcomePageState extends State<WelcomePage> {
                           MaterialPageRoute(builder: (context) => MonumentPage()),
                         );
                       },
-                      child: _buildCircularIcon(Icons.local_activity_outlined),
+                      child: _buildCircularIcon(Icons.account_balance),
                     ),
                     GestureDetector(
                       onTap: () {
@@ -188,7 +188,7 @@ class _WelcomePageState extends State<WelcomePage> {
                               RestaurantPage()),
                         );
                       },
-                      child: _buildCircularIcon(Icons.food_bank),
+                      child: _buildCircularIcon(Icons.fastfood),
                     ),
                   ],
                 ),
@@ -307,7 +307,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 },
               ),
               IconButton(
-                icon: Icon(Icons.maps_ugc_outlined),
+                icon: Icon(Icons.chat),
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -316,7 +316,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 },
               ),
               IconButton(
-                icon: Icon(Icons.accessibility),
+                icon: Icon(Icons.person),
                 onPressed: () {
                   Navigator.push(
                     context,
