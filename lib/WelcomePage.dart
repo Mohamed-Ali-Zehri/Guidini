@@ -10,10 +10,10 @@ class WelcomePage extends StatefulWidget {
   _WelcomePageState createState() => _WelcomePageState();
 }
 
-
 class _WelcomePageState extends State<WelcomePage> {
-  final double spacingFactor = 0.05; // Adjust this value to set the spacing
+  final double spacingFactor = 0.05;
   late PageController _pageController;
+  late TextEditingController _searchController;
   int _currentPage = 0;
   List<String> _imageList = [
     'images/ain_draham_winter.jpeg',
@@ -22,16 +22,29 @@ class _WelcomePageState extends State<WelcomePage> {
     'images/el jem.jpeg',
   ];
 
+
+  Map<String, List<String>> placeImagesMap = {
+    'Ain Draham': ['images/ain_draham_winter.jpeg', 'Ain Draham in Tunisia is a scenic mountain town with a cool climate and a mix of French and Arabic influences.'],
+    'Barrdo': ['images/barrdo.jpeg', 'The Bardo Museum in Tunis, Tunisia, showcases a diverse collection of ancient artifacts, particularly from the Roman period, housed in a historic 19th-century palace.'],
+    'Djerba': ['images/djerba_summer.jpeg', 'Djerba, an enchanting Tunisian island in the Mediterranean, captivates with its historic sites, including the El Ghriba Synagogue.'],
+    'El Jem': ['images/el jem.jpeg', 'El Jem Museum offers a captivating journey through the rich archaeological heritage of El Jem, showcasing artifacts from its ancient Roman history.'],
+    // Add more places and their corresponding images
+  };
+
+  List<String> _filteredImages = [];
+
   @override
   void initState() {
     super.initState();
     _pageController = PageController();
+    _searchController = TextEditingController(); // Added this line
     _startAutoScroll();
   }
 
   @override
   void dispose() {
     _pageController.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -54,219 +67,221 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home :Scaffold(
-          body: SingleChildScrollView(
-      child: Container(
-        color: Colors.white,
-        padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 20.0),
-            Text(
-              'Welcome To Guidini',
-              style: TextStyle(
-                fontSize: 17,
-                fontFamily: 'inter',
-              ),
-            ),
-            SizedBox(height: 15.0),
-            Row(
+      home: Scaffold(
+        body: SingleChildScrollView(
+          child: Container(
+            color: Colors.white,
+            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 10.0),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Search your destination here',
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
-                        ),
-                        border: InputBorder.none,
-                      ),
-                    ),
+                SizedBox(height: 25.0),
+                Text(
+                  'Welcome To Guidini',
+                  style: TextStyle(
+                    fontSize: 27,
+                    fontFamily: 'inter',
                   ),
                 ),
-                SizedBox(width: 10.0),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15.0),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 4,
-                        offset: Offset(0, 2),
+                SizedBox(height: 15.0),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        child: TextField(
+                          controller: _searchController,
+                          decoration: InputDecoration(
+                            hintText: 'Search your destination here',
+                            hintStyle: TextStyle(
+                              color: Colors.grey,
+                            ),
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 10.0),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            spreadRadius: 2,
+                            blurRadius: 4,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: IconButton(
+                        onPressed: () {
+                          _filterImages(_searchController.text);
+                          _showFilteredImagesDialog(_searchController.text);
+                        },
+                        icon: Icon(Icons.search),
+                        iconSize: 30,
+                        color: Colors.blue[900],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 30.0),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Search By Category',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.normal,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      Container(
+                        height: 2.0,
+                        width: 40.0,
+                        color: Colors.blue[900],
                       ),
                     ],
                   ),
-                  child: IconButton(
-                    onPressed: () {
-                      // Perform search logic
+                ),
+                SizedBox(height: 10.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) =>
+                              ActivityPage()),
+                        );
+                        // Handle onPressed for the first icon (Icons.nature)
+                        // Add your custom logic here
+                      },
+                      child: _buildCircularIcon(Icons.nature),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Monument()),
+                        );
+                      },
+                      child: _buildCircularIcon(Icons.local_activity_outlined),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) =>
+                              RestaurantPage()),
+                        );
+                      },
+                      child: _buildCircularIcon(Icons.food_bank),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 30.0),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Most Visited',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.normal,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      Container(
+                        height: 2.0,
+                        width: 40.0,
+                        color: Colors.blue[900],
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 10.0),
+                Container(
+                  height: 120.0,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    controller: _pageController,
+                    itemCount: _imageList.length,
+                    itemBuilder: (context, index) {
+                      return _buildImageCard(_imageList[index]);
                     },
-                    icon: Icon(Icons.search),
-                    iconSize: 30,
-                    color: Colors.blue[900],
                   ),
+                ),
+                SizedBox(height: 30.0),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Seasonal Suggestion',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.normal,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      Container(
+                        height: 2.0,
+                        width: 40.0,
+                        color: Colors.blue[900],
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 10.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildImageCard('images/hamamet.jpg'),
+                    _buildImageCard('images/sidi-boussaid.jpeg'),
+                  ],
+                ),
+                SizedBox(height: 30.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildImageCard('images/cha9.jpg'),
+                    _buildImageCard('images/douga_spring.jpeg'),
+                  ],
+                ),
+                SizedBox(height: 30),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildImageCard('images/sweater.jpg'),
+                    _buildImageCard('images/borguiba.jpg'),
+                  ],
+                ),
+                SizedBox(height: 30),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildImageCard('images/ba9a.jpg'),
+                    _buildImageCard('images/tgtg.jpg'),
+                  ],
                 ),
               ],
             ),
-            SizedBox(height: 30.0),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Search By Category',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.normal,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  Container(
-                    height: 2.0,
-                    width: 40.0,
-                    color: Colors.blue[900],
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 10.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ActivityPage()),
-                    );
-                    // Handle onPressed for first icon (Icons.nature)
-                    // Add your custom logic here
-                  },
-                  child: _buildCircularIcon(Icons.nature),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Monument()),
-                    );
-                  },
-                  child: _buildCircularIcon(Icons.local_activity_outlined),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => RestaurantPage()),
-                    );
-                  },
-                  child: _buildCircularIcon(Icons.food_bank),
-                ),
-              ],
-            ),
-            SizedBox(height: 30.0),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Most Visited',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.normal,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  Container(
-                    height: 2.0,
-                    width: 40.0,
-                    color: Colors.blue[900],
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 10.0),
-            Container(
-              height: 120.0,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                controller: _pageController,
-                itemCount: _imageList.length,
-                itemBuilder: (context, index) {
-                  return _buildImageCard(_imageList[index]);
-                },
-              ),
-            ),
-            SizedBox(height: 30.0),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Seasonal Suggestion',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.normal,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  Container(
-                    height: 2.0,
-                    width: 40.0,
-                    color: Colors.blue[900],
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 10.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildImageCard('images/hamamet.jpg'),
-                _buildImageCard('images/sidi-boussaid.jpeg'),
-              ],
-            ),
-            SizedBox(height: 30.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildImageCard('images/cha9.jpg'),
-                _buildImageCard('images/douga_spring.jpeg'),
-              ],
-            ),
-            SizedBox(height: 30,
-            ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _buildImageCard('images/sweater.jpg'),
-            _buildImageCard('images/borguiba.jpg'),
-          ],
+          ),
         ),
-            SizedBox(height: 30,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildImageCard('images/ba9a.jpg'),
-                _buildImageCard('images/tgtg.jpg'),
-              ],
-            ),
-      ],
-    ),
-      ),
-    ),
         bottomNavigationBar: BottomAppBar(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -293,45 +308,43 @@ class _WelcomePageState extends State<WelcomePage> {
                 icon: Icon(Icons.maps_ugc_outlined),
                 onPressed: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ChatPage(),),);
+                    context,
+                    MaterialPageRoute(builder: (context) => ChatPage()),
+                  );
                 },
               ),
               IconButton(
                 icon: Icon(Icons.accessibility),
-                onPressed: () {
-
-                },
+                onPressed: () {},
               ),
             ],
           ),
         ),
-    ),
+      ),
     );
   }
 
   Widget _buildCircularIcon(IconData iconData) {
-
     return Container(
-    width: 70.0,
-    height: 70.0,
-    decoration: BoxDecoration(
-    color: Colors.white,
-    shape: BoxShape.circle,
-    boxShadow: [
-    BoxShadow(
-    color: Colors.black.withOpacity(0.2),
-    spreadRadius: 2,
-    blurRadius: 4,
-    offset: Offset(0, 2),
-    ),
-    ],
-    ),
-    child: Icon(
-    iconData,
-    size: 50.0,
-    color: Colors.blue[900],
-    ),
+      width: 70.0,
+      height: 70.0,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            spreadRadius: 2,
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Icon(
+        iconData,
+        size: 50.0,
+        color: Colors.blue[900],
+      ),
     );
   }
 
@@ -356,8 +369,75 @@ class _WelcomePageState extends State<WelcomePage> {
           ),
         ],
       ),
-
-
     );
   }
+
+  void _filterImages(String query) {
+    setState(() {
+      _filteredImages = placeImagesMap.entries
+          .where((entry) =>
+          entry.key.toLowerCase().contains(query.toLowerCase()))
+          .expand((entry) => entry.value)
+          .toList();
+    });
+  }
+
+  void _showFilteredImagesDialog(String placeName) {
+    List<String>? placeInfo = placeImagesMap[placeName];
+
+    if (placeInfo != null && placeInfo.length == 2) {
+      String imagePath = placeInfo[0];
+      String description = placeInfo[1];
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(placeName),
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(16.0), // Adjust the radius as needed
+                  child: Image.asset(
+                    imagePath,
+                    height: 200.0,
+                    width: double.maxFinite,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                SizedBox(height: 35.0),
+
+                Container(
+                  margin: EdgeInsets.only(left: 15.5, right: 15.5),
+                  child: Text(
+                    description,
+                    style: TextStyle(
+                      fontSize: 16.50,
+                      color: Colors.grey,
+
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('CLOSE'),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      // Handle the case where place info is not available
+      print('Place information not found for $placeName');
+    }
+  }
+
+
 }
