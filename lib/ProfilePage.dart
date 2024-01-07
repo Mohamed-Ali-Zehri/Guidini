@@ -1,292 +1,321 @@
 import 'package:flutter/material.dart';
-import 'package:guidini_app/WelcomePage.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:guidini_app/ChatPage.dart';
+import 'package:guidini_app/WelcomePage.dart';
 import 'package:guidini_app/MapPage.dart';
 
-class User {
-  String userName;
-  String profilePicture;
 
-  User({
-    required this.userName,
-    required this.profilePicture,
-  });
-}
 
-class Site {
-  String name;
-  String image;
-  String description;
-  bool isLiked;
-
-  Site({
-    required this.name,
-    required this.image,
-    required this.description,
-    this.isLiked = false,
-  });
-}
-
-class ProfilePage extends StatefulWidget {
+class ProfilePage extends StatelessWidget {
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          title: Center(child: Text('User Profile', style: TextStyle(color: Colors.white))),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          iconTheme: IconThemeData(color: Colors.white),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
+        body: UserProfile(),
+        bottomNavigationBar: BottomAppBar(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
+                icon: Icon(Icons.home),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => WelcomePage()),
+                  );
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.map),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MapPage()),
+                  );
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.chat),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ChatPage()),
+                  );
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.person),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ProfilePage()),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+
+    );
+  }
 }
 
-class _ProfilePageState extends State<ProfilePage> {
-  final User user = User(
-    userName: 'John Doe',
-    profilePicture: 'assets/jhon.jpg', // Replace with the path to the actual image
-  );
+class UserProfile extends StatefulWidget {
+  @override
+  _UserProfileState createState() => _UserProfileState();
+}
 
-  final List<Site> favoriteSites = [
-    Site(
-      name: 'Tourist Spot 1',
-      image: 'assets/sbs.jpg', // Replace with the path to the actual image
-      description: 'A wonderful tourist spot with amazing views.',
-    ),
-    Site(
-      name: 'Tourist Spot 2',
-      image: 'assets/jam.jpg', // Replace with the path to the actual image
-      description: 'Explore the beauty of this historical site.',
-    ),
-    // Add more sites as needed
-  ];
+class _UserProfileState extends State<UserProfile> {
+  final ImagePicker _picker = ImagePicker();
+  String _avatarImagePath =
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Man_Silhouette.png/220px-Man_Silhouette.png';
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: SizedBox.shrink(), // Remove the title from the top left
-        actions: [
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.height / 2,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(
+                    'https://media.istockphoto.com/id/889535070/vector/blur-gradient-sky-background.jpg?s=612x612&w=0&k=20&c=72ar3C7XKBjp7lLxdwiKNwFRmMslvm2e3G0MBvwGCsk='),
+                fit: BoxFit.cover,
+              ),
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(20.0),
+              ),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(height: 9),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    Ink(
+                      decoration: ShapeDecoration(
+                        color: Colors.transparent,
+                        shape: CircleBorder(),
+                      ),
+                      child: InkWell(
+                        onTap: () {},
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(Icons.settings, color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20),
+                // User Circle
+                Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Colors.white,
+                      width: 2.0,
+                    ),
+                  ),
+                  child: Stack(
+                    children: [
+                      CircleAvatar(
+                        radius: 50,
+                        backgroundImage: NetworkImage(_avatarImagePath),
+                      ),
+                      Positioned(
+                        bottom: 8,
+                        left: 8,
+                        child: Container(
+                          width: 16,
+                          height: 16,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.green,
+                            border: Border.all(
+                              color: Colors.green,
+                              width: 2.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: -3,
+                        right: -3,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.grey[200],
+                            border: Border.all(
+                              color: Colors.white,
+                              width: 2.0,
+                            ),
+                          ),
+                          padding: EdgeInsets.all(3.0),
+                          child: Center(
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.camera_alt,
+                                color: Colors.black,
+                                size: 12,
+                              ),
+                              onPressed: () async {
+                                // Open image picker when the camera icon is clicked
+                                final XFile? pickedImage =
+                                await _picker.pickImage(source: ImageSource.gallery);
+                                if (pickedImage != null) {
+                                  // Handle the selected image
+                                  _updateAvatar(pickedImage.path);
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  'Alex',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  'Global Adventurer',
+                  style: TextStyle(fontSize: 12, color: Colors.white),
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '100   ',
+                      style: TextStyle(fontSize: 12, color: Colors.white),
+                    ),
+                    Text(
+                      'followers',
+                      style: TextStyle(fontSize: 10, color: Colors.white),
+                    ),
+                    Container(
+                      height: 20,
+                      width: 1,
+                      color: Colors.white,
+                      margin: EdgeInsets.symmetric(horizontal: 5),
+                    ),
+                    Text(
+                      '102   ',
+                      style: TextStyle(fontSize: 12, color: Colors.white),
+                    ),
+                    Text(
+                      'following',
+                      style: TextStyle(fontSize: 10, color: Colors.white),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+
+          // Adding the recently visited places title
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(16.0),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Places Recently Visited',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+
+          // Adding the recent places cards
+          _buildRecentPlacesCard(
+            'Amphitheatre of El Jem',
+            'This impressive Roman amphitheatre is one of the largest in the world and is a UNESCO World Heritage Site',
+            'https://media.routard.com/image/04/8/pt13857.1226048.w430.jpg',
+          ),
+          _buildRecentPlacesCard(
+            'The Okba Ibn Nafaâ Mosque',
+            'This one of the oldest and most significant mosques in North Africa, bearing witness to Islamic history and architecture.',
+            'https://cdn2.webmanagercenter.com/wmc/wp-content/uploads/2023/08/okbaibnnaffa-kairouan.jpg',
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRecentPlacesCard(String placeName, String description, String imageUrl) {
+    return Card(
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 1,
             child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 8.0,
-                    spreadRadius: 2.0,
+              margin: EdgeInsets.all(4.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.network(
+                  imageUrl,
+                  height: 100,
+                  width: 100,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    placeName,
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    description,
+                    style: TextStyle(fontSize: 12),
                   ),
                 ],
-              ),
-              child: IconButton(
-                icon: Icon(Icons.edit, size: 30.0, color: Colors.black),
-                onPressed: () {
-                  // Navigate to the edit page for username, email, and password
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => EditEmailPasswordPage(),
-                    ),
-                  );
-                },
               ),
             ),
           ),
         ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onTap: () {
-                // Navigate to the page for changing the profile picture
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ChangeProfilePicturePage(),
-                  ),
-                );
-              },
-              child: Container(
-                width: 150.0,
-                height: 150.0,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 10.0,
-                      spreadRadius: 2.0,
-                    ),
-                  ],
-                  image: DecorationImage(
-                    image: AssetImage(user.profilePicture),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: Container(
-                    padding: EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                    ),
-                    child: Icon(Icons.camera_alt),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 24.0),
-            // Display favorite sites
-            for (var site in favoriteSites) buildFavoriteSiteCard(site),
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              icon: Icon(Icons.home),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => WelcomePage()),
-                );
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.map),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MapPage()),
-                );
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.maps_ugc_outlined),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ChatPage()),
-                );
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.accessibility),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ProfilePage()),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
     );
   }
 
-  Widget buildFavoriteSiteCard(Site site) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.0),
-      child: Card(
-        elevation: 5.0,
-        child: ListTile(
-          leading: Image.asset(
-            site.image,
-            width: 70.0,
-            height: 70.0,
-            fit: BoxFit.cover,
-          ),
-          title: Text(site.name),
-          subtitle: Text(site.description),
-          trailing: GestureDetector(
-            onTap: () {
-              setState(() {
-                // Toggle the liked status
-                site.isLiked = !site.isLiked;
-              });
-            },
-            child: Icon(
-              site.isLiked ? Icons.favorite : Icons.favorite_border,
-              color: site.isLiked ? Colors.red : null,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class EditEmailPasswordPage extends StatefulWidget {
-  @override
-  _EditEmailPasswordPageState createState() => _EditEmailPasswordPageState();
-}
-
-class _EditEmailPasswordPageState extends State<EditEmailPasswordPage> {
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Edit Username, Email, and Password'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextField(
-              controller: usernameController,
-              decoration: InputDecoration(
-                labelText: 'New Username',
-              ),
-            ),
-            SizedBox(height: 16.0),
-            TextField(
-              controller: emailController,
-              decoration: InputDecoration(
-                labelText: 'New Email',
-              ),
-            ),
-            SizedBox(height: 16.0),
-            TextField(
-              controller: passwordController,
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: 'New Password',
-              ),
-            ),
-            SizedBox(height: 32.0),
-            ElevatedButton(
-              onPressed: () {
-                // Add functionality to save username, email, and password
-                print('Username: ${usernameController.text}');
-                print('Email: ${emailController.text}');
-                print('Password: ${passwordController.text}');
-                // You can add logic here to save the new username, email, and password
-                Navigator.pop(context); // Close the edit page after saving
-              },
-              child: Text('Save'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ChangeProfilePicturePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Change Profile Picture'),
-      ),
-      body: Center(
-        child: Text('This is where you can change your profile picture.'),
-      ),
-    );
+  void _updateAvatar(String imagePath) {
+    setState(() {
+      _avatarImagePath = imagePath;
+    });
   }
 }

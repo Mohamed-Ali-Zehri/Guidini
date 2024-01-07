@@ -340,7 +340,7 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
             IconButton(
-              icon: Icon(Icons.maps_ugc_outlined),
+              icon: Icon(Icons.chat),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -349,7 +349,7 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
             IconButton(
-              icon: Icon(Icons.accessibility),
+              icon: Icon(Icons.person),
               onPressed: () {
                 Navigator.push(
                   context,
