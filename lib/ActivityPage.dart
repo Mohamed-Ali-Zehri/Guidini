@@ -97,16 +97,16 @@ class _ActivityPageState extends State<ActivityPage> {
                           Expanded(
                             child: Container(
                               decoration: BoxDecoration(
-                                color: Colors.grey.withOpacity(0.6),
+                                color: Colors.grey.withOpacity(0.4),
                                 borderRadius: BorderRadius.circular(15.0),
                               ),
                               child: TextField(
-                                textAlign: TextAlign.center,
+                                textAlign: TextAlign.left,
                                 onChanged: (query) {
                                   _filterActivities(query);
                                 },
                                 decoration: InputDecoration(
-                                  hintText: 'Search your activity here',
+                                  hintText: '     Search your activity here',
                                   hintStyle: TextStyle(
                                     color: Colors.white,
                                   ),
@@ -148,11 +148,24 @@ class _ActivityPageState extends State<ActivityPage> {
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: filteredActivities.length,
                       itemBuilder: (context, index) {
-                        return buildListItem(
-                          filteredActivities[index].imagePath,
-                          filteredActivities[index].title,
-                          filteredActivities[index].rating,
-                          filteredActivities[index].description,
+                        return GestureDetector(
+                          onTap: () {
+                            // Navigate to the detail page for the selected monument
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ActivityDetailPage(
+                                  activity: filteredActivities[index],
+                                ),
+                              ),
+                            );
+                          },
+                          child: buildListItem(
+                            filteredActivities[index].imagePath,
+                            filteredActivities[index].title,
+                            filteredActivities[index].rating,
+                            filteredActivities[index].description,
+                          ),
                         );
                       },
                     ),
@@ -272,6 +285,70 @@ class _ActivityPageState extends State<ActivityPage> {
                   ),
                 ],
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+class ActivityDetailPage extends StatelessWidget {
+  final Activity activity;
+
+  ActivityDetailPage({required this.activity});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(activity.title),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.asset(
+              activity.imagePath,
+              width: MediaQuery.of(context).size.width,
+              height: 200,
+              fit: BoxFit.cover,
+            ),
+            SizedBox(height: 16),
+            Text(
+              activity.title,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
+            SizedBox(height: 8),
+            Row(
+              children: [
+                Icon(
+                  Icons.star,
+                  color: activity.rating >= 1.0 ? Color.fromARGB(255, 236, 213, 0) : Colors.grey,
+                ),
+                Icon(
+                  Icons.star,
+                  color: activity.rating >= 2.0 ? Color.fromARGB(255, 236, 213, 0): Colors.grey,
+                ),
+                Icon(
+                  Icons.star,
+                  color: activity.rating >= 3.0 ? Color.fromARGB(255, 236, 213, 0) : Colors.grey,
+                ),
+                Icon(
+                  Icons.star,
+                  color: activity.rating >= 4.0 ? Color.fromARGB(255, 236, 213, 0) : Colors.grey,
+                ),
+                Icon(
+                  Icons.star,
+                  color: activity.rating >= 5.0 ? Color.fromARGB(255, 236, 213, 0) : Colors.grey,
+                ),
+                SizedBox(width: 4),
+              ],
+            ),
+            SizedBox(height: 8),
+            Text(
+              activity.description,
+              style: TextStyle(fontSize: 16),
             ),
           ],
         ),

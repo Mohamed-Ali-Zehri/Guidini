@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-
-
 class ActivityDetailsPage extends StatelessWidget {
+
   final String activityTitle = "Le Sud Tunisien entre Oasis et Montagne";
   final String duration = "3 jours";
   final String price = "À partir de 550,00€ par adulte";

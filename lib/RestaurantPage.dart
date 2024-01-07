@@ -8,7 +8,6 @@ import 'package:guidini_app/ChatPage.dart';
 class Restaurant {
   final String imagePath;
   final String title;
-  final String description;
   final double rating;
   final String phoneNumber;
   final String openingHours;
@@ -17,7 +16,6 @@ class Restaurant {
   Restaurant({
     required this.imagePath,
     required this.title,
-    required this.description,
     required this.rating,
     required this.phoneNumber,
     required this.openingHours,
@@ -25,7 +23,65 @@ class Restaurant {
   });
 }
 
-class RestaurantPage extends StatelessWidget {
+class RestaurantPage extends StatefulWidget {
+  @override
+  _RestaurantPageState createState() => _RestaurantPageState();
+}
+
+class _RestaurantPageState extends State<RestaurantPage> {
+  List<Restaurant> restaurants = [
+    Restaurant(
+      imagePath: 'images/jeld.jpg',
+      title: 'Dar El Jeld Restaurant',
+      rating: 4.5,
+      phoneNumber: '+216 71 234 567',
+      openingHours: '11:00 AM',
+      closingHours: '10:00 PM',
+    ),
+    Restaurant(
+      imagePath: 'images/mdina.jpg',
+      title: 'La medina',
+      rating: 4.5,
+      phoneNumber: '+216 98 765 432',
+      openingHours: '10:30 AM AM',
+      closingHours: '09:30 PM',
+    ),
+    Restaurant(
+      imagePath: 'images/fal.jpg',
+      title: 'La Falaise',
+      rating: 4.8,
+      phoneNumber: '+216 50 987 654',
+      openingHours: '12:00 AM',
+      closingHours: '11:00 PM',
+    ),
+    Restaurant(
+      imagePath:'images/cont.jpg',
+      title:'Dar Belhaj',
+      rating: 4.3,
+      phoneNumber:'+216 71 111 222',
+      openingHours: '08:00 AM',
+      closingHours: '09:00 PM',
+    ),
+    // Add more activities
+  ];
+  List<Restaurant> filteredRestaurants = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize filteredActivities with all activities
+    filteredRestaurants = restaurants;
+  }
+
+  void _filterRestaurants(String query) {
+    setState(() {
+      filteredRestaurants = restaurants
+          .where((restaurant) =>
+      restaurant.title.toLowerCase().contains(query.toLowerCase()) ||
+          restaurant.phoneNumber.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -57,12 +113,12 @@ class RestaurantPage extends StatelessWidget {
                           child: Container(
 
                             decoration: BoxDecoration(
-                              color: Colors.grey.withOpacity(0.6),
+                              color: Colors.grey.withOpacity(0.4),
                               borderRadius: BorderRadius.circular(15.0),
                             ),
 
                             child: TextField(
-                              textAlign: TextAlign.center,
+                              textAlign: TextAlign.left,
                               decoration: InputDecoration(
 
                                 hintText: 'Search your destination here',
@@ -102,74 +158,33 @@ class RestaurantPage extends StatelessWidget {
                     ),
                   ),
                     SizedBox(height: 30,),
-                    ListView(
+                    ListView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
-                      children: [
-                        buildListItem(
-                          'images/jeld.jpg',
-                          'Dar El Jeld Restaurant',
-
-                          4.5,
-                          '+216 71 234 567',
-                          '11:00 AM',
-                          '10:00 PM',
-                        ),
-                        buildListItem(
-                          'images/mdina.jpg',
-                          'La medina',
-
-                          4.2,
-                          '+216 98 765 432',
-                          '10:30 AM',
-                          '09:30 PM',
-                        ),
-                        buildListItem(
-                          'images/fal.jpg',
-                          'La Falaise',
-
-                          4.8,
-                          '+216 50 987 654',
-                          '12:00 PM',
-                          '11:00 PM',
-                        ),
-                        buildListItem(
-                          'images/cont.jpg',
-                          'Dar Belhaj',
-
-                          4.3,
-                          '+216 71 111 222',
-                          '08:00 AM',
-                          '09:00 PM',
-                        ),
-                        buildListItem(
-                          'images/jcc.jpg',
-                          'Le boudoir Sousse',
-
-                          4.6,
-                          '+216 23 441 252',
-                          '09:00 AM',
-                          '10:00 PM',
-                        ),
-                        buildListItem(
-                          'images/ast.jpg',
-                          "L'Astragale",
-
-                          4.3,
-                          '+216 71 785 080',
-                          '10:30 AM',
-                          '09:00 PM',
-                        ),
-                        buildListItem(
-                          'images/alo.jpg',
-                          'El Ali',
-
-                          4.1,
-                          '+216 72 236 842',
-                          '08:30 AM',
-                          '10:00 PM',)
-
-                      ],
+                      itemCount: filteredRestaurants.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            // Navigate to the detail page for the selected monument
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RestaurantDetailPage(
+                                  restaurant: filteredRestaurants[index],
+                                ),
+                              ),
+                            );
+                          },
+                          child: buildListItem(
+                            filteredRestaurants[index].imagePath,
+                            filteredRestaurants[index].title,
+                            filteredRestaurants[index].rating,
+                            filteredRestaurants[index].phoneNumber,
+                            filteredRestaurants[index].openingHours,
+                            filteredRestaurants[index].closingHours,
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -286,6 +301,77 @@ class RestaurantPage extends StatelessWidget {
                   ),
                 ],
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+class RestaurantDetailPage extends StatelessWidget {
+  final Restaurant restaurant;
+
+  RestaurantDetailPage({required this.restaurant});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(restaurant.title),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.asset(
+              restaurant.imagePath,
+              width: MediaQuery.of(context).size.width,
+              height: 200,
+              fit: BoxFit.cover,
+            ),
+            SizedBox(height: 16),
+            Text(
+              restaurant.title,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
+            SizedBox(height: 8),
+            Row(
+              children: [
+                Icon(
+                  Icons.star,
+                  color: restaurant.rating >= 1.0 ? Color.fromARGB(255, 236, 213, 0) : Colors.grey,
+                ),
+                Icon(
+                  Icons.star,
+                  color: restaurant.rating >= 2.0 ? Color.fromARGB(255, 236, 213, 0): Colors.grey,
+                ),
+                Icon(
+                  Icons.star,
+                  color: restaurant.rating >= 3.0 ? Color.fromARGB(255, 236, 213, 0) : Colors.grey,
+                ),
+                Icon(
+                  Icons.star,
+                  color: restaurant.rating >= 4.0 ? Color.fromARGB(255, 236, 213, 0) : Colors.grey,
+                ),
+
+                SizedBox(width: 4),
+              ],
+            ),
+            SizedBox(height: 8),
+            Text(
+              restaurant.phoneNumber,
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 8),
+            Text(
+              restaurant.openingHours,
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 8),
+            Text(
+              restaurant.closingHours,
+              style: TextStyle(fontSize: 16),
             ),
           ],
         ),
