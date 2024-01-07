@@ -4,6 +4,7 @@ plugins {
     id "dev.flutter.flutter-gradle-plugin"
 }
 
+
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
@@ -21,6 +22,10 @@ def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
+
+apply plugin: "com.google.gms.google-services"
+apply plugin: "com.android.application"
+
 
 android {
     namespace "com.example.guidini_app"
@@ -46,7 +51,7 @@ android {
         multiDexEnabled true
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 20
+        minSdkVersion 21
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -61,8 +66,10 @@ android {
     }
 }
 
+
 flutter {
     source '../..'
 }
 
 dependencies {}
+

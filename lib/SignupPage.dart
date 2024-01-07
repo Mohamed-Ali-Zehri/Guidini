@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:guidini_app/LoginPage.dart';
+
+import 'LoginPage.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -7,50 +9,45 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  TextEditingController nameController = TextEditingController();
-  TextEditingController surnameController = TextEditingController();
-  TextEditingController addressController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController confirmPasswordController = TextEditingController();
 
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
   bool isConfirmPasswordValid = true;
 
-  void signUp() {
-    String name = nameController.text;
-    String surname = surnameController.text;
-    String address = addressController.text;
-    String password = passwordController.text;
-    String confirmPassword = confirmPasswordController.text;
+  Future signUp() async {
 
-    if (name.isNotEmpty && surname.isNotEmpty && address.isNotEmpty && password.isNotEmpty && password == confirmPassword) {
-      // Perform sign-up logic
+     Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
+    );
 
-      // Navigate to home page
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
-      );
-    } else {
-      // Show error message alert
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Error'),
-            content: Text('Please ensure all fields are filled correctly.'),
-            actions: <Widget>[
-              TextButton(
-                child: Text('OK', style: TextStyle(color: Colors.red)),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
+    // Use _emailController and _passwordController for Firebase authentication
+    await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim());
+    if(passwordConfirmed()){
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim());
+
     }
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
   }
+
+  }
+bool passwordConfirmed() {
+  if (_passwordController.text.trim() == _confirmPasswordController.text.trim()) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +89,6 @@ class _SignUpPageState extends State<SignUpPage> {
                   width: inputWidth,
                   margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: TextField(
-                    controller: nameController,
                     decoration: InputDecoration(
                       hintText: 'Name',
                       border: UnderlineInputBorder(
@@ -105,7 +101,6 @@ class _SignUpPageState extends State<SignUpPage> {
                   width: inputWidth,
                   margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: TextField(
-                    controller: surnameController,
                     decoration: InputDecoration(
                       hintText: 'Surname',
                       border: UnderlineInputBorder(
@@ -114,15 +109,18 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                 ),
-                Container(
-                  width: inputWidth,
-                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: TextField(
-                    controller: addressController,
-                    decoration: InputDecoration(
-                      hintText: 'Address',
-                      border: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.cyan),
+                GestureDetector(
+                  onTap: signUp,
+                  child: Container(
+                    width: inputWidth,
+                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    child: TextField(
+                      controller: _emailController,
+                      decoration: InputDecoration(
+                        hintText: 'Address',
+                        border: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.cyan),
+                        ),
                       ),
                     ),
                   ),
@@ -131,8 +129,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   width: inputWidth,
                   margin: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                   child: TextField(
-                    controller: passwordController,
                     obscureText: true,
+                    controller: _passwordController,
                     decoration: InputDecoration(
                       hintText: 'Choose Password',
                       border: UnderlineInputBorder(
@@ -145,7 +143,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   width: inputWidth,
                   margin: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                   child: TextField(
-                    controller: confirmPasswordController,
+                    controller: _confirmPasswordController,
                     obscureText: true,
                     decoration: InputDecoration(
                       hintText: 'Confirm Password',

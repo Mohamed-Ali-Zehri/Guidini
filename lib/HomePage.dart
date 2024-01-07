@@ -5,7 +5,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double inputWidth = 200.0;
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(Duration(seconds: 1), () {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => LoginPage()),
