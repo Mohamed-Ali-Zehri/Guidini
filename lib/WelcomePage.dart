@@ -174,7 +174,7 @@ class _WelcomePageState extends State<WelcomePage> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Monument()),
+                          MaterialPageRoute(builder: (context) => MonumentPage()),
                         );
                       },
                       child: _buildCircularIcon(Icons.local_activity_outlined),

@@ -1,508 +1,141 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:guidini_app/ChatPage.dart';
+import'package:guidini_app/MapPage.dart';
 import 'package:guidini_app/WelcomePage.dart';
-import 'package:guidini_app/MapPage.dart';
 
-class Monument extends StatefulWidget {
-  const Monument({super.key});
 
-  @override
-  State<Monument> createState() => _MonumentState();
+class Monument {
+  final String imagePath;
+  final String title;
+  final double rating;
+  final String description;
+
+  Monument({
+    required this.imagePath,
+    required this.title,
+    required this.rating,
+    required this.description,
+
+  });
 }
 
-class _MonumentState extends State<Monument> {
-  var height, width;
-
+class MonumentPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    height = MediaQuery.of(context).size.height;
-    width = MediaQuery.of(context).size.width;
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Container(
-          height: height,
-          width: width,
-          color: Colors.white,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              children: [
-                SizedBox(
-                  height: height * 0.035,
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Historical Monument!',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+
+        ),
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: constraints.maxHeight,
                 ),
-                SizedBox(
-                  height: height * 0.07,
-                  width: width * 0.9,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                child: Column(
+                  children: [
+
+                    FractionallySizedBox(
+                      widthFactor: 0.9, // Set the width to 80% of the screen width
+                      alignment: Alignment.center,
+                      child:Row(
                         children: [
-                          Text(
-                            "Historical Monument",
-                            style: GoogleFonts.lexend(
-                              fontSize: width * 0.05,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.black,
+                          Expanded(
+                            child: Container(
+
+                              decoration: BoxDecoration(
+                                color: Colors.grey.withOpacity(0.6),
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+
+                              child: TextField(
+                                textAlign: TextAlign.center,
+                                decoration: InputDecoration(
+
+                                  hintText: 'Search your destination here',
+                                  hintStyle: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 5.0),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.2,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(15.0),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  spreadRadius: 2,
+                                  blurRadius: 4,
+                                  offset: Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: IconButton(
+                              onPressed: () {
+                                // Perform search logic
+                              },
+                              icon: Icon(Icons.search),
+                              iconSize: 30,
+                              color: Colors.grey,
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: height * 0.01,
-                      ),
-                      Container(
-                        height: height * 0.035,
-                        width: width * 0.11,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: height * 0.005,
-                ),
-                Container(
-                  height: height * 0.073,
-                  width: width * 0.9,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.3),
-                    borderRadius: BorderRadius.circular(13),
-                  ),
-                  child: Center(
-                    child: Padding(
-                      padding: EdgeInsets.only(left: width * 0.03),
-                      child: TextFormField(
-                        style: const TextStyle(
-                          color: Colors.white,
-                        ),
-                        autovalidateMode:
-                        AutovalidateMode.onUserInteraction,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "Search your destination here",
-                          hintStyle: GoogleFonts.lexend(
-                            color: Colors.grey,
-                            fontSize: width * 0.04,
-                          ),
-                          prefixIcon: Icon(
-                            Icons.search,
-                            color: Colors.black54,
-                            size: width * 0.09,
-                          ),
-                        ),
-                      ),
                     ),
-                  ),
-                ),
-                SizedBox(
-                  height: height * 0.035,
-                ),
-                SizedBox(
-                  width: width * 0.9,
-                  child: Padding(
-                    padding:
-                    EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                    child: Column(
+                    SizedBox(height: 30,),
+                    ListView(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
                       children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 10),
-                          child: Container(
-                            width: 380,
-                            height: 130,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 3,
-                                  blurRadius: 10,
-                                  offset: Offset(0, 3),
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceEvenly,
-                              children: [
-                                InkWell(
-                                  onTap: () {},
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(15),
-                                      // Ajustez la valeur selon votre préférence
-                                      child: Image.asset(
-                                        "images/img1.jpeg",
-                                        height: 200,
-                                        width: 120,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  width: 190,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Text(
-                                        "Amphitheatre of El Jem",
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Text(
-                                        "This impressive Roman amphitheatre is one of the largest in the world and is a UNESCO World Heritage Site",
-                                        style: TextStyle(
-                                          fontSize: 10,
-                                        ),
-                                      ),
-                                      RatingBar.builder(
-                                        initialRating: 4,
-                                        minRating: 1,
-                                        direction: Axis.horizontal,
-                                        itemCount: 5,
-                                        itemSize: 15,
-                                        itemPadding:
-                                        EdgeInsets.symmetric(
-                                            horizontal: 4),
-                                        itemBuilder: (context, _) => Icon(
-                                          Icons.star,
-                                          color: Colors.yellow.shade900,
-                                        ),
-                                        onRatingUpdate: (index) {},
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding:
-                                  EdgeInsets.symmetric(vertical: 10),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Icon(
-                                        Icons.favorite_border,
-                                        color: Colors.red,
-                                        size: 21,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 10),
-                          child: Container(
-                            width: 380,
-                            height: 130,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 3,
-                                  blurRadius: 10,
-                                  offset: Offset(0, 3),
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceEvenly,
-                              children: [
-                                InkWell(
-                                  onTap: () {},
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(15), // Ajustez la valeur selon votre préférence
-                                      child: Image.asset(
-                                        "images/img2.jpeg",
-                                        height: 200,
-                                        width: 120,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  width: 190,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Text(
-                                        "The Okba Ibn Nafaâ Mosque ",
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Text(
-                                        "This one of the oldest and most significant mosques in North Africa, bearing witness to Islamic history and architecture.",
-                                        style: TextStyle(
-                                          fontSize: 10,
-                                        ),
-                                      ),
-                                      RatingBar.builder(
-                                        initialRating: 4,
-                                        minRating: 1,
-                                        direction: Axis.horizontal,
-                                        itemCount: 5,
-                                        itemSize: 15,
-                                        itemPadding:
-                                        EdgeInsets.symmetric(
-                                            horizontal: 4),
-                                        itemBuilder: (context, _) => Icon(
-                                          Icons.star,
-                                          color: Colors.yellow.shade900,
-                                        ),
-                                        onRatingUpdate: (index) {},
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding:
-                                  EdgeInsets.symmetric(vertical: 10),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Icon(
-                                        Icons.favorite_border,
-                                        color: Colors.red,
-                                        size: 21,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 10),
-                          child: Container(
-                            width: 380,
-                            height: 130,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 3,
-                                  blurRadius: 10,
-                                  offset: Offset(0, 3),
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceEvenly,
-                              children: [
-                                InkWell(
-                                  onTap: () {},
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(15), // Ajustez la valeur selon votre préférence
-                                      child: Image.asset(
-                                        "images/img3.jpeg",
-                                        height: 200,
-                                        width: 120,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  width: 190,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Text(
-                                        "Dougga, Tunisie",
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Text(
-                                        "Known for its well-preserved Roman ruins, Dougga offers a fascinating glimpse into ancient Roman architecture and civilization",
-                                        style: TextStyle(
-                                          fontSize: 10,
-                                        ),
-                                      ),
-                                      RatingBar.builder(
-                                        initialRating: 4,
-                                        minRating: 1,
-                                        direction: Axis.horizontal,
-                                        itemCount: 5,
-                                        itemSize: 15,
-                                        itemPadding:
-                                        EdgeInsets.symmetric(
-                                            horizontal: 4),
-                                        itemBuilder: (context, _) => Icon(
-                                          Icons.star,
-                                          color: Colors.yellow.shade900,
-                                        ),
-                                        onRatingUpdate: (index) {},
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding:
-                                  EdgeInsets.symmetric(vertical: 10),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Icon(
-                                        Icons.favorite_border,
-                                        color: Colors.red,
-                                        size: 21,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                        buildListItem(
+                          "images/img1.jpeg",
+                          'Amphitheatre of El Jem',
 
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 10),
-                          child: Container(
-                            width: 380,
-                            height: 130,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 3,
-                                  blurRadius: 10,
-                                  offset: Offset(0, 3),
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceEvenly,
-                              children: [
-                                InkWell(
-                                  onTap: () {},
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(15), // Ajustez la valeur selon votre préférence
-                                      child: Image.asset(
-                                        "images/img6.jpg",
-                                        height: 200,
-                                        width: 120,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  width: 190,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Text(
-                                        "Carthage",
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Text(
-                                        "Carthage, Tunisia: Key archaeological site, featuring Phoenician and Roman ruins, reflecting a rich history and cultural significance.",
-                                        style: TextStyle(
-                                          fontSize: 10,
-                                        ),
-                                      ),
-                                      RatingBar.builder(
-                                        initialRating: 4,
-                                        minRating: 1,
-                                        direction: Axis.horizontal,
-                                        itemCount: 5,
-                                        itemSize: 15,
-                                        itemPadding:
-                                        EdgeInsets.symmetric(
-                                            horizontal: 4),
-                                        itemBuilder: (context, _) => Icon(
-                                          Icons.star,
-                                          color: Colors.yellow.shade900,
-                                        ),
-                                        onRatingUpdate: (index) {},
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding:
-                                  EdgeInsets.symmetric(vertical: 10),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Icon(
-                                        Icons.favorite_border,
-                                        color: Colors.red,
-                                        size: 21,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                          4.5,
+                          "This impressive Roman amphitheatre is one of the largest in the world and is a UNESCO World Heritage Site",
 
+                        ),
+                        buildListItem(
+                          "images/img2.jpeg",
+                          'The Okba Ibn Nafaâ Mosque',
+
+                          4.2,
+                          "This one of the oldest and most significant mosques in North Africa.",
+                        ),
+                        buildListItem(
+                          "images/img3.jpeg",
+                          'Dougga, Tunisie',
+
+                          4.8,
+                          "Dougga offers a fascinating glimpse into ancient Roman architecture and civilization",
+
+                        ),
+                        buildListItem(
+                          "images/img6.jpg",
+                          'Carthage',
+
+                          4.3,
+                          "Carthage, Tunisia: Key archaeological site, featuring Phoenician and Roman ruins.",
+                        ),
                       ],
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-
+              ),
+            );
+          },
         ),
         bottomNavigationBar: BottomAppBar(
           child: Row(
@@ -529,10 +162,7 @@ class _MonumentState extends State<Monument> {
               IconButton(
                 icon: Icon(Icons.maps_ugc_outlined),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ChatPage()),
-                  );
+
                 },
               ),
               IconButton(
@@ -547,4 +177,91 @@ class _MonumentState extends State<Monument> {
       ),
     );
   }
+
+  Widget buildListItem(String imagePath, String title, double rating, String description) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: Colors.grey[200],
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image.asset(
+                  imagePath,
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    description,
+                    style: TextStyle(fontWeight: FontWeight.normal),
+                  ),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.star,
+                        color: rating >= 1.0 ? Color.fromARGB(255, 236, 213, 0) : Colors.grey,
+                      ),
+                      Icon(
+                        Icons.star,
+                        color: rating >= 2.0 ? Color.fromARGB(255, 236, 213, 0): Colors.grey,
+                      ),
+                      Icon(
+                        Icons.star,
+                        color: rating >= 3.0 ? Color.fromARGB(255, 236, 213, 0) : Colors.grey,
+                      ),
+                      Icon(
+                        Icons.star,
+                        color: rating >= 4.0 ? Color.fromARGB(255, 236, 213, 0) : Colors.grey,
+                      ),
+                      Icon(
+                        Icons.star,
+                        color: rating >= 5.0 ? Color.fromARGB(255, 236, 213, 0) : Colors.grey,
+                      ),
+                      SizedBox(width: 4),
+
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
+
+
+
+
+
+
+
+
+
+

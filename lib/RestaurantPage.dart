@@ -57,15 +57,15 @@ class RestaurantPage extends StatelessWidget {
                           child: Container(
 
                             decoration: BoxDecoration(
-                              color: Colors.grey,
+                              color: Colors.grey.withOpacity(0.6),
                               borderRadius: BorderRadius.circular(15.0),
                             ),
 
                             child: TextField(
-                              textAlign: TextAlign.left,
+                              textAlign: TextAlign.center,
                               decoration: InputDecoration(
 
-                                hintText: '      Search your destination here',
+                                hintText: 'Search your destination here',
                                 hintStyle: TextStyle(
                                   color: Colors.white,
                                 ),
@@ -95,7 +95,7 @@ class RestaurantPage extends StatelessWidget {
                             },
                             icon: Icon(Icons.search),
                             iconSize: 30,
-                            color: Colors.blue[900],
+                            color: Colors.grey,
                           ),
                         ),
                       ],
