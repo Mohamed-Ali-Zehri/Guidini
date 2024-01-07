@@ -255,13 +255,3 @@ class MonumentPage extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
-
-
-
-
-

@@ -68,6 +68,7 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: SingleChildScrollView(
           child: Container(
@@ -247,7 +248,7 @@ class _WelcomePageState extends State<WelcomePage> {
                     ],
                   ),
                 ),
-                SizedBox(height: 10.0),
+                SizedBox(height: 30.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
