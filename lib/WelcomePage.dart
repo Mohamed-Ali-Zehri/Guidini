@@ -4,6 +4,7 @@ import 'package:guidini_app/RestaurantPage.dart';
 import 'package:guidini_app/ChatPage.dart';
 import 'package:guidini_app/MonumentPage.dart';
 import 'package:guidini_app/ActivityPage.dart';
+import 'package:guidini_app/ProfilePage.dart';
 
 class WelcomePage extends StatefulWidget {
   @override
@@ -315,7 +316,12 @@ class _WelcomePageState extends State<WelcomePage> {
               ),
               IconButton(
                 icon: Icon(Icons.accessibility),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ProfilePage()),
+                  );
+                },
               ),
             ],
           ),

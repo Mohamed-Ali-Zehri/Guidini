@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:convert' as convert;
+import 'package:guidini_app/ProfilePage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:guidini_app/WelcomePage.dart';
 import 'package:guidini_app/ChatPage.dart';
+import 'package:guidini_app/ProfilePage.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -196,6 +198,10 @@ class _MapPageState extends State<MapPage> {
           }),
           _buildBottomNavItem(Icons.accessibility, () {
             // Add your functionality here
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProfilePage()),
+            );
           }),
         ],
       ),
