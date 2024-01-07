@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:guidini_app/Auth.dart';
+import 'package:guidini_app/imageWelcomepage.dart';
 
 import 'ForgetPWD.dart';
 import 'HomePage.dart';
@@ -9,6 +10,7 @@ import 'MapPage.dart';
 import 'RestaurantPage.dart';
 import 'SignupPage.dart';
 import 'WelcomePage.dart';
+import 'hammamet.dart';
 
 
 class MyApp extends StatelessWidget {
@@ -18,6 +20,8 @@ class MyApp extends StatelessWidget {
       title: 'My App',
       initialRoute: '/home',
       routes: {
+        '/login/welcomepage/HamPage': (context) => HamPage(),
+        '/login/welcomepage/details': (context) => DetailPage(),
         '/home': (context) => HomePage(),
         '/login': (context) => LoginPage(),
         '/auth': (context) => Auth(),
