@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import'package:guidini_app/MapPage.dart';
+import 'package:guidini_app/MapPage.dart';
 import 'package:guidini_app/WelcomePage.dart';
-
 
 class Activity {
   final String imagePath;
@@ -14,11 +13,62 @@ class Activity {
     required this.title,
     required this.rating,
     required this.description,
-
   });
 }
 
-class ActivityPage extends StatelessWidget {
+class ActivityPage extends StatefulWidget {
+  @override
+  _ActivityPageState createState() => _ActivityPageState();
+}
+
+class _ActivityPageState extends State<ActivityPage> {
+  List<Activity> activities = [
+    Activity(
+      imagePath: "images/kayak.jpg",
+      title: 'Sunset Kayak & Tour Immersif',
+      rating: 4.5,
+      description: "Exploration en kayak le long des côtes pittoresques de Bizerte.",
+    ),
+    Activity(
+      imagePath: "images/bateau.jpg",
+      title: 'Excursion Bateau Pirate',
+      rating: 4.2,
+      description: "Explorez les eaux de Sousse avec l'excursion en bateau pirate.",
+    ),
+    Activity(
+      imagePath: "images/parachute.jpeg",
+      title: 'Parachute Ascensionnel',
+      rating: 4.8,
+      description: "Adrénaline et vue panoramique à Djerba : Parachute Ascensionnel inoubliable.",
+    ),
+    Activity(
+      imagePath: "images/jet_ski.jpeg",
+      title: 'Jet Ski',
+      rating: 4.3,
+      description: "Explorez les eaux cristallines de Djerba avec l'excitation et la vitesse du jet ski.",
+    ),
+    // Add more activities
+  ];
+
+  List<Activity> filteredActivities = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize filteredActivities with all activities
+    filteredActivities = activities;
+  }
+
+  void _filterActivities(String query) {
+    setState(() {
+      filteredActivities = activities
+          .where((activity) =>
+      activity.title.toLowerCase().contains(query.toLowerCase()) ||
+          activity.description.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -29,7 +79,6 @@ class ActivityPage extends StatelessWidget {
             'Activity To Do!',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
-
         ),
         body: LayoutBuilder(
           builder: (context, constraints) {
@@ -40,24 +89,23 @@ class ActivityPage extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-
                     FractionallySizedBox(
-                      widthFactor: 0.9, // Set the width to 80% of the screen width
+                      widthFactor: 0.9,
                       alignment: Alignment.center,
-                      child:Row(
+                      child: Row(
                         children: [
                           Expanded(
                             child: Container(
-
                               decoration: BoxDecoration(
                                 color: Colors.grey.withOpacity(0.6),
                                 borderRadius: BorderRadius.circular(15.0),
                               ),
-
                               child: TextField(
                                 textAlign: TextAlign.center,
+                                onChanged: (query) {
+                                  _filterActivities(query);
+                                },
                                 decoration: InputDecoration(
-
                                   hintText: 'Search your activity here',
                                   hintStyle: TextStyle(
                                     color: Colors.white,
@@ -95,41 +143,18 @@ class ActivityPage extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 30,),
-                    ListView(
+                    ListView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
-                      children: [
-                        buildListItem(
-                          "images/kayak.jpg",
-                          'Sunset Kayak & Tour Immersif',
-
-                          4.5,
-                          "Exploration en kayak le long des côtes pittoresques de Bizerte.",
-
-                        ),
-                        buildListItem(
-                          "images/bateau.jpg",
-                          'Excursion Bateau Pirate',
-
-                          4.2,
-                          "Explorez les eaux de Sousse avec l'excursion en bateau pirate.",
-                        ),
-                        buildListItem(
-                          "images/parachute.jpeg",
-                          'Parachute Ascensionnel',
-
-                          4.8,
-                          "Adrénaline et vue panoramique à Djerba : Parachute Ascensionnel inoubliable.",
-
-                        ),
-                        buildListItem(
-                          "images/jet_ski.jpeg",
-                          'Jet Ski',
-
-                          4.3,
-                          "Explorez les eaux cristallines de Djerba avec l'excitation et la vitesse du jet ski.",
-                        ),
-                      ],
+                      itemCount: filteredActivities.length,
+                      itemBuilder: (context, index) {
+                        return buildListItem(
+                          filteredActivities[index].imagePath,
+                          filteredActivities[index].title,
+                          filteredActivities[index].rating,
+                          filteredActivities[index].description,
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -162,13 +187,13 @@ class ActivityPage extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.maps_ugc_outlined),
                 onPressed: () {
-
+                  // Handle onPressed for the third icon
                 },
               ),
               IconButton(
                 icon: Icon(Icons.accessibility),
                 onPressed: () {
-
+                  // Handle onPressed for the fourth icon
                 },
               ),
             ],
@@ -228,7 +253,7 @@ class ActivityPage extends StatelessWidget {
                       ),
                       Icon(
                         Icons.star,
-                        color: rating >= 2.0 ? Color.fromARGB(255, 236, 213, 0): Colors.grey,
+                        color: rating >= 2.0 ? Color.fromARGB(255, 236, 213, 0) : Colors.grey,
                       ),
                       Icon(
                         Icons.star,
@@ -243,7 +268,6 @@ class ActivityPage extends StatelessWidget {
                         color: rating >= 5.0 ? Color.fromARGB(255, 236, 213, 0) : Colors.grey,
                       ),
                       SizedBox(width: 4),
-
                     ],
                   ),
                 ],
@@ -255,4 +279,3 @@ class ActivityPage extends StatelessWidget {
     );
   }
 }
-
