@@ -18,107 +18,159 @@ class _MapPageState extends State<MapPage> {
   MapType _currentMapType = MapType.normal;
 
   static final CameraPosition _initialCameraPosition = CameraPosition(
-    target: LatLng(36.8065, 10.1815),
+    target:LatLng(36.8069, 10.1839),
     zoom: 14.4746,
+  );
+
+  static final Marker _googlePlexMarker = Marker(
+    markerId: MarkerId('_kGooglePlex'),
+    infoWindow: InfoWindow(title: 'Google Plex'),
+    icon: BitmapDescriptor.defaultMarker,
+    position: LatLng(36.8065, 10.1815),
+  );
+
+  static final CameraPosition _kLake = CameraPosition(
+    bearing: 192.83349,
+    target: LatLng(36.8069, 10.1839),
+    tilt: 59.44071769,
+    zoom: 19.151926,
   );
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(title: Text('Map App')),
-        body: Column(
-          children: [
-            _searchBar(),
-            Expanded(
-              child: GoogleMap(
-                mapType: _currentMapType,
-                markers: _markers,
-                initialCameraPosition: _initialCameraPosition,
-                onMapCreated: (GoogleMapController controller) {
-                  _controller.complete(controller);
-                },
-                myLocationEnabled: true,
-                myLocationButtonEnabled: true,
+    return Scaffold(
+      appBar: AppBar(title: Text('Map')),
+      body: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  controller: _searchController,
+                  textCapitalization: TextCapitalization.words,
+                  decoration: InputDecoration(hintText: 'Search by City'),
+                  onChanged: (value) {
+                    print(value);
+                  },
+                ),
               ),
-            ),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _toggleMapType,
-          tooltip: 'Toggle Map Type',
-          child: Icon(Icons.layers),
-        ),
-        bottomNavigationBar: _buildBottomAppBar(context),
-      ),
-    );
-  }
-
-  Widget _searchBar() {
-    return Row(
-      children: [
-        Expanded(
-          child: TextFormField(
-            controller: _searchController,
-            textCapitalization: TextCapitalization.words,
-            decoration: InputDecoration(hintText: 'Search by City'),
-            onFieldSubmitted: (value) => _onSearchSubmitted(value),
+              IconButton(
+                onPressed: () async {
+                  await _goToPlace(_searchController.text);
+                },
+                icon: Icon(Icons.search),
+              ),
+              IconButton(
+                icon: Icon(Icons.layers),
+                onPressed: () {
+                  _toggleMapType();
+                },
+              ),
+            ],
           ),
-        ),
-        IconButton(
-          onPressed: () => _onSearchSubmitted(_searchController.text),
-          icon: Icon(Icons.search),
-        ),
-      ],
+          Expanded(
+            child: GoogleMap(
+              mapType: _currentMapType,
+              markers: {
+                _googlePlexMarker,
+              },
+              initialCameraPosition: _initialCameraPosition,
+              onMapCreated: (GoogleMapController controller) {
+                _controller.complete(controller);
+              },
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: _goToTheLake,
+        label: Text('To the lake!'),
+        icon: Icon(Icons.directions_boat),
+      ),
+      bottomNavigationBar: _buildBottomAppBar(context),
     );
+
   }
+  Map<String, dynamic> MyPlaces = {
+    'Eljem': LatLng(35.3266, 10.7558),
+    'mahdia': LatLng(35.5037, 11.0569),
+    'sousse': LatLng(35.8288, 10.6405),
+    'tozeur': LatLng(33.9308, 8.1332),
+    'Tunis': LatLng(36.8069, 10.1839),
+    'Sfax': LatLng(34.7489, 10.7613),
+    'Sousse': LatLng(35.8288, 10.6405),
+    'Gabes': LatLng(33.8812, 10.0982),
+    'Bizerte': LatLng(37.2722, 9.8669),
+    'Nabeul': LatLng(36.4560, 10.7351),
+    'Kairouan': LatLng(35.6784, 10.0965),
+    'Tozeur': LatLng(33.9308, 8.1332),
+    'Gafsa': LatLng(34.4250, 8.7841),
+    'Mahdia': LatLng(35.5037, 11.0569),
+    'Monastir': LatLng(35.7653, 10.8095),
+    'Ariana': LatLng(36.8663, 10.1952),
+    'Jendouba': LatLng(36.5016, 8.7805),
+    'El Kef': LatLng(36.1612, 8.7049),
+    'Medenine': LatLng(33.3518, 10.4970),
+    'Siliana': LatLng(36.0830, 9.3710),
+    'Beja': LatLng(36.7304, 9.1900),
+    'Kebili': LatLng(33.7058, 8.9692),
+    'Tataouine': LatLng(32.9290, 10.4518),
+    'Zaghouan': LatLng(36.4000, 10.1300),
+    'Kasserine': LatLng(35.1670, 8.8369),
+    'Manouba': LatLng(36.8126, 10.1015),
+    'Ben Arous': LatLng(36.7281, 10.2702),
+    'Médenine': LatLng(33.3528, 10.5078),
+    'sidialouane': LatLng(35.5015, 11.0514),
+    'Sidi Bou Said': LatLng(36.8702, 10.3426), // Famous for its blue and white architecture
+    'Carthage': LatLng(36.8628, 10.3232), // Ancient city with archaeological ruins
+    'Dougga': LatLng(36.4201, 9.2150), // UNESCO World Heritage site with Roman ruins
+    'kairouan': LatLng(35.6784, 10.0965), // Holy city with the Great Mosque of Kairouan
+    'Matmata': LatLng(33.5519, 9.9737), // Known for its unique underground troglodyte dwellings
+    'Djerba': LatLng(33.7742, 10.8855), // Island with beautiful beaches and cultural sites
+    'El Jem': LatLng(35.3278, 10.7542), // Home to the impressive Roman amphitheater
+    'bizerte': LatLng(37.2722, 9.8669), // Coastal city with a historic old town
+    'Kelibia': LatLng(36.8585, 11.0930), // Known for its fortress and beautiful beaches
+    'Tabarka': LatLng(36.9570, 8.7570), // Coastal town with a unique blend of nature and history
+    'Medina of Tunis': LatLng(36.8064, 10.1581), // UNESCO World Heritage site with a vibrant medina
+    'Ksar Ouled Soltane': LatLng(35.8123, 10.5517), // Historic granary with unique architecture
+    'Hammamet': LatLng(36.3989, 10.6212),
+  };
+  Future<void> _goToPlace(String placeName) async {
+    final GoogleMapController controller = await _controller.future;
 
-  Future<void> _onSearchSubmitted(String value) async {
-    try {
-      var placeDetails = await LocationServices().getPlace(value);
-      if (placeDetails.isNotEmpty) {
-        _updateMapLocation(placeDetails);
-      } else {
-        print("No results found or there was an error");
-      }
-    } catch (e) {
-      print('Error fetching place data: $e');
-    }
-  }
+    // Check if the placeName exists in the MyPlaces map
+    if (MyPlaces.containsKey(placeName)) {
+      var location = MyPlaces[placeName];
+      var lat = location.latitude;
+      var lng = location.longitude;
 
-  void _updateMapLocation(Map<String, dynamic> placeDetails) {
-    final double lat = placeDetails['geometry']['location']['lat'];
-    final double lng = placeDetails['geometry']['location']['lng'];
-    final LatLng newLocation = LatLng(lat, lng);
-
-    setState(() {
-      _markers.clear();
-      _markers.add(
-        Marker(
-          markerId: MarkerId(newLocation.toString()),
-          position: newLocation,
-          infoWindow: InfoWindow(
-            title: placeDetails['name'],
-            snippet: placeDetails['formatted_address'],
+      controller.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: LatLng(lat, lng),
+            zoom: 12,
           ),
         ),
       );
-
-      _controller.future.then((controller) => controller.animateCamera(
-        CameraUpdate.newCameraPosition(
-          CameraPosition(target: newLocation, zoom: 15),
-        ),
-      ));
-    });
+    } else {
+      // Handle the case where the placeName is not found in MyPlaces
+      print('Invalid place name: $placeName');
+    }
   }
 
+
+
+  Future<void> _goToTheLake() async {
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
+  }
   void _toggleMapType() {
     setState(() {
-      _currentMapType =
-      _currentMapType == MapType.normal ? MapType.satellite : MapType.normal;
+      _currentMapType = (_currentMapType == MapType.normal)
+          ? MapType.satellite
+          : MapType.normal;
     });
   }
-
   Widget _buildBottomAppBar(BuildContext context) {
     return BottomAppBar(
       child: Row(
@@ -150,6 +202,9 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
+
+
+
   Widget _buildBottomNavItem(IconData icon, VoidCallback onPressed) {
     return IconButton(
       icon: Icon(icon),
@@ -160,9 +215,8 @@ class _MapPageState extends State<MapPage> {
 
 class LocationServices {
   final String key =
-      'YOUR_GOOGLE_MAPS_API_KEY'; // Replace with your actual API key
+      'AAIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao'; // Replace with your actual API key
 
-  // Utility method for API call
   Future<dynamic> _getApiResponse(String url) async {
     try {
       var response = await http.get(Uri.parse(url));
@@ -212,3 +266,4 @@ class LocationServices {
     }
   }
 }
+
