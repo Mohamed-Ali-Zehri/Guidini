@@ -18,107 +18,109 @@ class _MapPageState extends State<MapPage> {
   MapType _currentMapType = MapType.normal;
 
   static final CameraPosition _initialCameraPosition = CameraPosition(
-    target: LatLng(36.8065, 10.1815),
+    target:LatLng(36.8069, 10.1839),
     zoom: 14.4746,
+  );
+
+  static final Marker _googlePlexMarker = Marker(
+    markerId: MarkerId('_kGooglePlex'),
+    infoWindow: InfoWindow(title: 'Google Plex'),
+    icon: BitmapDescriptor.defaultMarker,
+    position: LatLng(36.8065, 10.1815),
+  );
+
+  static final CameraPosition _kLake = CameraPosition(
+    bearing: 192.83349,
+    target: LatLng(36.8069, 10.1839),
+    tilt: 59.44071769,
+    zoom: 19.151926,
   );
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(title: Text('Map App')),
-        body: Column(
-          children: [
-            _searchBar(),
-            Expanded(
-              child: GoogleMap(
-                mapType: _currentMapType,
-                markers: _markers,
-                initialCameraPosition: _initialCameraPosition,
-                onMapCreated: (GoogleMapController controller) {
-                  _controller.complete(controller);
-                },
-                myLocationEnabled: true,
-                myLocationButtonEnabled: true,
+    return Scaffold(
+      appBar: AppBar(title: Text('Map')),
+      body: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  controller: _searchController,
+                  textCapitalization: TextCapitalization.words,
+                  decoration: InputDecoration(hintText: 'Search by City'),
+                  onChanged: (value) {
+                    print(value);
+                  },
+                ),
               ),
+              IconButton(
+                onPressed: () async {
+                  var place = await LocationServices().getPlace(_searchController.text);
+                  _goToPlace(place, _searchController.text); // Pass the place object and place name
+                },
+                icon: Icon(Icons.search),
+              ),
+              IconButton(
+                icon: Icon(Icons.layers),
+                onPressed: () {
+                  _toggleMapType();
+                },
+              ),
+            ],
+          ),
+          Expanded(
+            child: GoogleMap(
+              mapType: _currentMapType,
+              markers: {
+                _googlePlexMarker,
+              },
+              initialCameraPosition: _initialCameraPosition,
+              onMapCreated: (GoogleMapController controller) {
+                _controller.complete(controller);
+              },
             ),
-          ],
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: _goToTheLake,
+        label: Text('To the lake!'),
+        icon: Icon(Icons.directions_boat),
+      ),
+      bottomNavigationBar: _buildBottomAppBar(context),
+    );
+
+  }
+  Map<String, dynamic> MyPlaces = {
+    'mahdia': LatLng(35.5037, 11.0569),
+    'sousse': LatLng(35.8288, 10.6405),
+    'tozeur': LatLng(33.9308, 8.1332),
+  };
+  Future<void> _goToPlace(Map<String, dynamic> place, String placeName) async {
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: LatLng(33.9308, 8.1332), // Use the correct place name as the key
+          zoom: 12,
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _toggleMapType,
-          tooltip: 'Toggle Map Type',
-          child: Icon(Icons.layers),
-        ),
-        bottomNavigationBar: _buildBottomAppBar(context),
       ),
     );
   }
 
-  Widget _searchBar() {
-    return Row(
-      children: [
-        Expanded(
-          child: TextFormField(
-            controller: _searchController,
-            textCapitalization: TextCapitalization.words,
-            decoration: InputDecoration(hintText: 'Search by City'),
-            onFieldSubmitted: (value) => _onSearchSubmitted(value),
-          ),
-        ),
-        IconButton(
-          onPressed: () => _onSearchSubmitted(_searchController.text),
-          icon: Icon(Icons.search),
-        ),
-      ],
-    );
+
+  Future<void> _goToTheLake() async {
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
   }
-
-  Future<void> _onSearchSubmitted(String value) async {
-    try {
-      var placeDetails = await LocationServices().getPlace(value);
-      if (placeDetails.isNotEmpty) {
-        _updateMapLocation(placeDetails);
-      } else {
-        print("No results found or there was an error");
-      }
-    } catch (e) {
-      print('Error fetching place data: $e');
-    }
-  }
-
-  void _updateMapLocation(Map<String, dynamic> placeDetails) {
-    final double lat = placeDetails['geometry']['location']['lat'];
-    final double lng = placeDetails['geometry']['location']['lng'];
-    final LatLng newLocation = LatLng(lat, lng);
-
-    setState(() {
-      _markers.clear();
-      _markers.add(
-        Marker(
-          markerId: MarkerId(newLocation.toString()),
-          position: newLocation,
-          infoWindow: InfoWindow(
-            title: placeDetails['name'],
-            snippet: placeDetails['formatted_address'],
-          ),
-        ),
-      );
-
-      _controller.future.then((controller) => controller.animateCamera(
-        CameraUpdate.newCameraPosition(
-          CameraPosition(target: newLocation, zoom: 15),
-        ),
-      ));
-    });
-  }
-
   void _toggleMapType() {
     setState(() {
-      _currentMapType =
-      _currentMapType == MapType.normal ? MapType.satellite : MapType.normal;
+      _currentMapType = (_currentMapType == MapType.normal)
+          ? MapType.satellite
+          : MapType.normal;
     });
   }
-
   Widget _buildBottomAppBar(BuildContext context) {
     return BottomAppBar(
       child: Row(
@@ -150,6 +152,9 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
+
+
+
   Widget _buildBottomNavItem(IconData icon, VoidCallback onPressed) {
     return IconButton(
       icon: Icon(icon),
@@ -160,9 +165,8 @@ class _MapPageState extends State<MapPage> {
 
 class LocationServices {
   final String key =
-      'YOUR_GOOGLE_MAPS_API_KEY'; // Replace with your actual API key
+      'AAIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao'; // Replace with your actual API key
 
-  // Utility method for API call
   Future<dynamic> _getApiResponse(String url) async {
     try {
       var response = await http.get(Uri.parse(url));
@@ -212,3 +216,4 @@ class LocationServices {
     }
   }
 }
+

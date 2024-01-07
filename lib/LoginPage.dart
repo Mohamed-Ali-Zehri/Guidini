@@ -116,8 +116,8 @@ class LoginPage extends StatelessWidget {
                       child: Text(
                         'Sign in',
                         style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white.withOpacity(1),
+                          fontSize: 16,
+                          color: Colors.white.withOpacity(1),
                         ),
                       ),
                     ),
@@ -130,14 +130,14 @@ class LoginPage extends StatelessWidget {
               width: buttonWidth,
 
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(20),
               ),
 
               child: ElevatedButton(
                 child: Text('Sign up',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                      color: HSLColor.fromAHSL(1, 218, 0.75, 0.31).toColor(),
+                    color: HSLColor.fromAHSL(1, 218, 0.75, 0.31).toColor(),
                   ),
                 ),
 
