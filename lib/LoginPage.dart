@@ -93,7 +93,7 @@ class _LoginPageState extends State<LoginPage> {
                 width: inputWidth,
                 margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: TextField(
-                  obscureText: true,
+                  obscureText: false,
                   controller: _passwordController,
                   decoration: InputDecoration(
                     hintText: 'Password',
