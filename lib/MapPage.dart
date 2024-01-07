@@ -120,7 +120,20 @@ class _MapPageState extends State<MapPage> {
     'Manouba': LatLng(36.8126, 10.1015),
     'Ben Arous': LatLng(36.7281, 10.2702),
     'Médenine': LatLng(33.3528, 10.5078),
-    'Mahdia': LatLng(35.5015, 11.0514),
+    'sidialouane': LatLng(35.5015, 11.0514),
+    'Sidi Bou Said': LatLng(36.8702, 10.3426), // Famous for its blue and white architecture
+    'Carthage': LatLng(36.8628, 10.3232), // Ancient city with archaeological ruins
+    'Dougga': LatLng(36.4201, 9.2150), // UNESCO World Heritage site with Roman ruins
+    'kairouan': LatLng(35.6784, 10.0965), // Holy city with the Great Mosque of Kairouan
+    'Matmata': LatLng(33.5519, 9.9737), // Known for its unique underground troglodyte dwellings
+    'Djerba': LatLng(33.7742, 10.8855), // Island with beautiful beaches and cultural sites
+    'El Jem': LatLng(35.3278, 10.7542), // Home to the impressive Roman amphitheater
+    'bizerte': LatLng(37.2722, 9.8669), // Coastal city with a historic old town
+    'Kelibia': LatLng(36.8585, 11.0930), // Known for its fortress and beautiful beaches
+    'Tabarka': LatLng(36.9570, 8.7570), // Coastal town with a unique blend of nature and history
+    'Medina of Tunis': LatLng(36.8064, 10.1581), // UNESCO World Heritage site with a vibrant medina
+    'Ksar Ouled Soltane': LatLng(35.8123, 10.5517), // Historic granary with unique architecture
+    'Hammamet': LatLng(36.3989, 10.6212),
   };
   Future<void> _goToPlace(String placeName) async {
     final GoogleMapController controller = await _controller.future;
